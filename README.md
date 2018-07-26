@@ -1,5 +1,17 @@
 # pyFluidSynth
 
+This module didn't work for me on windows, so I made a few changes. 
+To get it working I used the 64bit dll from here:
+
+http://zdoom.org/files/libfluidsynth64.7z
+
+https://zdoom.org/wiki/FluidSynth
+
+I also removed the "set reverb full" and "set chorus full" functions, 
+because they aren't present in that dll and gave me errors..
+
+after that it worked... :)  
+
 <em>Python bindings for FluidSynth</em>
 
 This module contains python bindings for FluidSynth.  FluidSynth is a

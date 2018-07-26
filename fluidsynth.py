@@ -32,9 +32,13 @@ from future.utils import iteritems
 # A short circuited or expression to find the FluidSynth library
 # (mostly needed for Windows distributions of libfluidsynth supplied with QSynth)
 
-lib = find_library('fluidsynth') or \
-    find_library('libfluidsynth') or \
-    find_library('libfluidsynth-1')
+# For 64 bit on windows 
+lib = find_library('libfluidsynth64')
+
+if lib is None:
+    lib = find_library('fluidsynth') or \
+        find_library('libfluidsynth') or \
+        find_library('libfluidsynth-1')
 
 if lib is None:
     raise ImportError("Couldn't find the FluidSynth library.")
@@ -179,22 +183,30 @@ fluid_synth_get_channel_info = cfunc('fluid_synth_get_channel_info', c_int,
                                   ('chan', c_int, 1),
                                   ('info', POINTER(fluid_synth_channel_info_t), 1))
 
-fluid_synth_set_reverb_full = cfunc('fluid_synth_set_reverb_full', c_int,
-                                    ('synth', c_void_p, 1),
-                                    ('set', c_int, 1),
-                                    ('roomsize', c_double, 1),
-                                    ('damping', c_double, 1),
-                                    ('width', c_double, 1),
-                                    ('level', c_double, 1))
-                                    
-fluid_synth_set_chorus_full = cfunc('fluid_synth_set_chorus_full', c_int,
-                                    ('synth', c_void_p, 1),
-                                    ('set', c_int, 1),
-                                    ('nr', c_int, 1),
-                                    ('level', c_double, 1),
-                                    ('speed', c_double, 1),
-                                    ('depth_ms', c_double, 1),
-                                    ('type', c_int, 1))
+# These functions are not included in the 64bit library I have, maybe its only on linux? 
+
+try:
+    fluid_synth_set_reverb_full = cfunc('fluid_synth_set_reverb_full', c_int,
+                                        ('synth', c_void_p, 1),
+                                        ('set', c_int, 1),
+                                        ('roomsize', c_double, 1),
+                                        ('damping', c_double, 1),
+                                        ('width', c_double, 1),
+                                        ('level', c_double, 1))
+except:
+    print("skipping reverb full")
+
+try:
+    fluid_synth_set_chorus_full = cfunc('fluid_synth_set_chorus_full', c_int,
+                                        ('synth', c_void_p, 1),
+                                        ('set', c_int, 1),
+                                        ('nr', c_int, 1),
+                                        ('level', c_double, 1),
+                                        ('speed', c_double, 1),
+                                        ('depth_ms', c_double, 1),
+                                        ('type', c_int, 1))
+except:
+    print("skipping chorus full")
 
 fluid_synth_get_reverb_roomsize = cfunc('fluid_synth_get_reverb_roomsize', c_double,
                                     ('synth', c_void_p, 1))
