@@ -193,8 +193,8 @@ try:
                                         ('damping', c_double, 1),
                                         ('width', c_double, 1),
                                         ('level', c_double, 1))
-except:
-    print("skipping reverb full")
+except AttributeError:
+    pass
 
 try:
     fluid_synth_set_chorus_full = cfunc('fluid_synth_set_chorus_full', c_int,
@@ -205,8 +205,8 @@ try:
                                         ('speed', c_double, 1),
                                         ('depth_ms', c_double, 1),
                                         ('type', c_int, 1))
-except:
-    print("skipping chorus full")
+except AttributeError:
+    pass
 
 fluid_synth_get_reverb_roomsize = cfunc('fluid_synth_get_reverb_roomsize', c_double,
                                     ('synth', c_void_p, 1))
